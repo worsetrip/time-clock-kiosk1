@@ -44,10 +44,7 @@ export default function TimeClockKiosk() {
     })
   }
 
-  // Simulate ID card login
   const handleIdCardLogin = () => {
-    console.log("[v0] ID Card Login initiated")
-    // Simulate card read - in production this would come from card reader
     const mockEmployee = {
       name: "John Driver",
       id: "EMP12345",
@@ -60,7 +57,6 @@ export default function TimeClockKiosk() {
   }
 
   const handleEmployeeIdLogin = () => {
-    console.log("[v0] Manual Employee ID Login initiated")
     setView("employeeIdEntry")
     setEnteredId("")
   }
@@ -81,7 +77,6 @@ export default function TimeClockKiosk() {
 
   const handleSubmitEmployeeId = () => {
     if (enteredId.length > 0) {
-      // In production, this would validate against a database
       const mockEmployee = {
         name: "Jane Operator",
         id: enteredId,
@@ -99,12 +94,9 @@ export default function TimeClockKiosk() {
   }
 
   const authenticateEmployee = (employee: typeof employeeData) => {
-    console.log("[v0] Authenticating employee:", employee.id)
     setEmployeeData(employee)
 
-    // Check if already clocked in
     if (!employee.clockedIn) {
-      // Clock them in and show DVI form
       const clockInTime = formatTime(new Date())
       setEmployeeData((prev) => ({
         ...prev,
@@ -112,24 +104,17 @@ export default function TimeClockKiosk() {
         clockInTime,
       }))
       setView("dvi")
-      console.log("[v0] Employee clocked in at:", clockInTime)
     } else if (!employee.dviCompleted) {
-      // Already clocked in but DVI not done
       setView("dvi")
-      console.log("[v0] Showing DVI form - not yet completed")
     } else {
-      // Already clocked in and DVI done - show clock out
       setView("clockout")
-      console.log("[v0] Showing clock out option")
     }
   }
 
   const handleDviComplete = () => {
-    console.log("[v0] DVI form completed")
     setEmployeeData((prev) => ({ ...prev, dviCompleted: true }))
     setView("complete")
 
-    // Auto-return to login after 3 seconds
     setTimeout(() => {
       setView("login")
       setEmployeeData({
@@ -143,10 +128,8 @@ export default function TimeClockKiosk() {
   }
 
   const handleClockOut = () => {
-    console.log("[v0] Employee clocked out")
     setView("complete")
 
-    // Auto-return to login after 3 seconds
     setTimeout(() => {
       setView("login")
       setEmployeeData({
@@ -162,7 +145,6 @@ export default function TimeClockKiosk() {
   if (view === "dvi") {
     return (
       <div className="min-h-screen bg-[#D3D3D3] flex flex-col">
-        {/* Header */}
         <header className="bg-[#E31E24] px-6 py-4 flex items-center gap-4">
           <button className="text-white">
             <Menu size={32} />
@@ -172,35 +154,31 @@ export default function TimeClockKiosk() {
               <Search size={20} className="text-gray-400" />
               <input type="text" placeholder="Search..." className="flex-1 outline-none text-lg" />
             </div>
-            <button className="bg-[#FFE500] text-black px-8 py-2 rounded font-bold text-lg hover:bg-yellow-400">
-              BUTTON 1
+            <button
+              onClick={handleIdCardLogin}
+              className="bg-[#FFE500] text-black px-8 py-2 rounded font-bold text-lg hover:bg-yellow-400 whitespace-nowrap"
+            >
+              ID CARD LOGIN
             </button>
-            <button className="bg-[#FFE500] text-black px-8 py-2 rounded font-bold text-lg hover:bg-yellow-400">
-              BUTTON 2
+            <button
+              onClick={handleEmployeeIdLogin}
+              className="bg-[#FFE500] text-black px-8 py-2 rounded font-bold text-lg hover:bg-yellow-400 whitespace-nowrap"
+            >
+              EMPLOYEE ID
             </button>
-            <button className="bg-[#FFE500] text-black px-8 py-2 rounded font-bold text-lg hover:bg-yellow-400">
-              BUTTON 3
-            </button>
-          </div>
-          <div className="text-white text-right">
-            <div className="text-sm">Score</div>
-            <div className="text-2xl font-bold">95</div>
           </div>
         </header>
 
-        {/* Employee Info Banner */}
         <div className="bg-[#E31E24] text-white px-6 py-3 text-center">
           <div className="text-xl font-bold">
             {employeeData.name} - {employeeData.id} - Clocked In: {employeeData.clockInTime}
           </div>
         </div>
 
-        {/* DVI Form with custom submit handler */}
         <div className="flex-1 overflow-auto">
           <DVIFormWrapper onComplete={handleDviComplete} />
         </div>
 
-        {/* Footer */}
         <footer className="bg-[#1A1A1A] text-white py-4 text-center">
           <div className="text-xl font-bold">VISI2N by Transdev</div>
         </footer>
@@ -220,19 +198,18 @@ export default function TimeClockKiosk() {
             <Search size={20} className="text-gray-400" />
             <input type="text" placeholder="Search..." className="flex-1 outline-none text-lg" />
           </div>
-          <button className="bg-[#FFE500] text-black px-8 py-2 rounded font-bold text-lg hover:bg-yellow-400">
-            BUTTON 1
+          <button
+            onClick={handleIdCardLogin}
+            className="bg-[#FFE500] text-black px-8 py-2 rounded font-bold text-lg hover:bg-yellow-400 whitespace-nowrap"
+          >
+            ID CARD LOGIN
           </button>
-          <button className="bg-[#FFE500] text-black px-8 py-2 rounded font-bold text-lg hover:bg-yellow-400">
-            BUTTON 2
+          <button
+            onClick={handleEmployeeIdLogin}
+            className="bg-[#FFE500] text-black px-8 py-2 rounded font-bold text-lg hover:bg-yellow-400 whitespace-nowrap"
+          >
+            EMPLOYEE ID
           </button>
-          <button className="bg-[#FFE500] text-black px-8 py-2 rounded font-bold text-lg hover:bg-yellow-400">
-            BUTTON 3
-          </button>
-        </div>
-        <div className="text-white text-right">
-          <div className="text-sm">Score</div>
-          <div className="text-2xl font-bold">95</div>
         </div>
       </header>
 
@@ -245,8 +222,7 @@ export default function TimeClockKiosk() {
       <main className="flex-1 flex items-center justify-center p-8">
         {view === "login" && (
           <div className="w-full max-w-4xl">
-            {/* Clock Display */}
-            <div className="bg-[#1A1A1A] rounded-3xl p-12 mb-8 shadow-2xl">
+            <div className="bg-[#1A1A1A] rounded-3xl p-12 shadow-2xl">
               <div className="text-center">
                 <div className="text-white text-8xl font-bold font-mono tracking-wider mb-4">
                   {formatTime(currentTime)}
@@ -254,28 +230,11 @@ export default function TimeClockKiosk() {
                 <div className="text-gray-400 text-2xl font-semibold">{formatDate(currentTime)}</div>
               </div>
             </div>
-
-            {/* Login Buttons */}
-            <div className="grid grid-cols-2 gap-6">
-              <button
-                onClick={handleIdCardLogin}
-                className="bg-[#E31E24] text-white rounded-2xl py-16 text-4xl font-bold hover:bg-red-700 transition-colors shadow-xl"
-              >
-                ID CARD LOGIN
-              </button>
-              <button
-                onClick={handleEmployeeIdLogin}
-                className="bg-[#FFE500] text-black rounded-2xl py-16 text-4xl font-bold hover:bg-yellow-400 transition-colors shadow-xl"
-              >
-                EMPLOYEE ID
-              </button>
-            </div>
           </div>
         )}
 
         {view === "employeeIdEntry" && (
           <div className="w-full max-w-4xl">
-            {/* ID Display */}
             <div className="bg-[#1A1A1A] rounded-3xl p-12 mb-8 shadow-2xl">
               <div className="text-center mb-6">
                 <div className="text-gray-400 text-2xl mb-4">Enter Employee ID</div>
@@ -285,7 +244,6 @@ export default function TimeClockKiosk() {
               </div>
             </div>
 
-            {/* Numeric Keypad */}
             <div className="grid grid-cols-3 gap-4 mb-6">
               {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((digit) => (
                 <button
@@ -316,7 +274,6 @@ export default function TimeClockKiosk() {
               </button>
             </div>
 
-            {/* Action Buttons */}
             <div className="grid grid-cols-2 gap-6">
               <button
                 onClick={handleCancelIdEntry}
@@ -371,10 +328,8 @@ export default function TimeClockKiosk() {
   )
 }
 
-// Wrapper component to override DVI form submit behavior
 function DVIFormWrapper({ onComplete }: { onComplete: () => void }) {
   useEffect(() => {
-    // Override the form's submit button behavior
     const handleSubmit = (e: Event) => {
       const target = e.target as HTMLElement
       if (target.textContent?.includes("Submit Inspection")) {
